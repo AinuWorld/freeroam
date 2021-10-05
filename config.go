@@ -10,9 +10,16 @@ type FMSConfig struct {
 	UpdateInterval int
 }
 
+type TLSConfig struct {
+	EnforceTLS     bool
+	PublicKeyFile  string
+	PrivateKeyFile string
+}
+
 type Config struct {
 	UDP UDPConfig
 	FMS FMSConfig
+	TLS TLSConfig
 }
 
 func DefaultConfig() Config {
@@ -23,6 +30,11 @@ func DefaultConfig() Config {
 		FMS: FMSConfig{
 			ListenAddress: "127.0.0.1:6996",
 			AllowedOrigin: "127.0.0.1",
+		},
+		TLS: TLSConfig{
+			EnforceTLS: false,
+			PublicKeyFile: "",
+			PrivateKeyFile: "",
 		},
 	}
 }

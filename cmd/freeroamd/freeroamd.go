@@ -74,9 +74,17 @@ func main() {
 		go mapSrv.Run()
 		go func() {
 			log.Printf("Starting FMS on %v", config.FMS.ListenAddress)
-			err := http.ListenAndServe(config.FMS.ListenAddress, fmsMux)
-			if err != nil {
-				log.Fatal(err)
+
+			if config.TLS.EnforceTLS != true {
+				err := http.ListenAndServe(config.FMS.ListenAddress, fmsMux)
+				if err != nil {
+					log.Fatal(err)
+				}
+			} else {
+				err := http.ListenAndServeTLS(config.FMS.ListenAddress, config.TLS.PublicKeyFile, config.TLS.PrivateKeyFile, fmsMux)
+				if err != nil {
+					log.Fatal(err)
+				}
 			}
 		}()
 	}
